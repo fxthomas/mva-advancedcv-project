@@ -36,9 +36,24 @@ def drawkp(im, kpl, rmin=5000):
   scatter (arx, ary)
   show()
 
+def comparekp (im1, kp1, im2, kp2):
+  arx = array ([kp1.pt[0]])
+  ary = array ([kp1.pt[1]])
+  hold(True)
+  imshow(im1)
+  scatter (arx, ary)
+  show()
+  arx = array ([kp2.pt[0]])
+  ary = array ([kp2.pt[1]])
+  hold(True)
+  imshow(im2)
+  scatter (arx, ary)
+  show()
+
+
 # Read images and initialize stuff
-b1 = imread ("b1.jpg")[::-1,:]
-b2 = imread ("b2.jpg")[::-1,:]
+b1 = cv2.imread (sys.argv[1])
+b2 = cv2.imread (sys.argv[2])
 if b2.shape != b1.shape:
   print ("Error: b1.shape != b2.shape!...")
   sys.exit(1)
@@ -46,12 +61,24 @@ h,w,d = b1.shape
 mask = 255*ones((h,w), dtype=uint8)
 
 # Run a SURF detector on both images
-detector = cv2.SURF()
+detector = cv2.SURF(0.)
 kp1, desc1 = detector.detect(b1[:,:,0].copy(), mask, False)
 kp2, desc2 = detector.detect(b2[:,:,0].copy(), mask, False)
-desc1 = desc1.reshape ((-1, 128))
-desc2 = desc2.reshape ((-1, 128))
+desc1 = desc1.reshape ((len(kp1), -1))
+desc2 = desc2.reshape ((len(kp2), -1))
+
+resp1 = array([kp.response for kp in kp1])
+resp2 = array([kp.response for kp in kp2])
+print ("Image {5}: Found {0} descr. MIN/AVG/MAX:STD is {1} / {2} / {3} : {4}".format (len(kp1), resp1.min(), resp1.mean(), resp1.max(), resp1.std(), sys.argv[1]))
+print ("Image {5}: Found {0} descr. MIN/AVG/MAX:STD is {1} / {2} / {3} : {4}".format (len(kp2), resp2.min(), resp2.mean(), resp2.max(), resp2.std(), sys.argv[2]))
 #drawkp (b1, kp1)
+
+iok1 = find(resp1 > resp1.mean() + resp1.std())
+iok2 = find(resp2 > resp2.mean() + resp2.std())
+kp1 = array(kp1)[iok1]
+kp2 = array(kp2)[iok2]
+desc1 = desc1[iok1, :].copy()
+desc2 = desc2[iok2, :].copy()
 
 # Match descriptors, see http://www.maths.lth.se/matematiklth/personal/solem/book.html for more info
 matchidx = -1 * ones ((len(desc1)), 'int')
@@ -73,7 +100,13 @@ kp2a = array ([kp.pt for kp in kp2])
 
 # Rectify images
 ff = cv2.findFundamentalMat (kp1a, kp2a)[0]
-rv, h1, h2 = cv2.stereoRectifyUncalibrated (kp1a.reshape ((-1)), kp2a.reshape((-1)), ff, (640, 480))
-subplot (121); imshow (cv2.warpPerspective (b1, h1, (640, 480)))
-subplot (122); imshow (cv2.warpPerspective (b2, h2, (640, 480)))
+rv, h1, h2 = cv2.stereoRectifyUncalibrated (kp1a.transpose().reshape ((-1)), kp2a.transpose().reshape((-1)), ff, (h, w))
+
+#b1r = cv2.warpPerspective (b1, h1, (w, h))
+#b2r = cv2.warpPerspective (b2, h2, (w, h))
+b1r = b1.copy()
+b2r = cv2.warpPerspective (b2, np.linalg.inv(np.mat(h1)) * np.mat(h2), (w,h))
+
+subplot (121); imshow (b1r)
+subplot (122); imshow (b2r)
 show()
