@@ -29,3 +29,7 @@ B = simpletree.dp (im1[:,:,0], im2[:,:,0], nd=20, backward=True)
 
 # Compute optimal costs
 C = F + B - m
+
+# Display computed disparity map (with only per-scanline optimization)
+imshow (C.argmin(axis=2), cmap=cm.gray)
+show()
