@@ -16,7 +16,10 @@ import numpy as np
 
 simpletree = Extension ('simpletree',
                         sources=['simpletree_mod.c', 'simpletree_funcs.c'],
-                        include_dirs = [np.get_include()])
+                        include_dirs = [np.get_include()],
+                        extra_compile_args=["-O0"],
+                        extra_link_args=["-O0"])
+
 setup (name = "SimpleTree",
        version = "0.1",
        description = "Simple tree algorithm for disparity map computation",

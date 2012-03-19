@@ -17,19 +17,49 @@ from pylab import *
 import sys
 import simpletree
 
-# Read images
-im1 = imread (sys.argv[1])[::-1,:,:]
-im2 = imread (sys.argv[2])[::-1,:,:]
+LAMBDA = 1.
 
-# Forward pass
-F,m = simpletree.dp (im1[:,:,0], im2[:,:,0], nd=20, backward=False, return_point_energy=True)
+def disparitymap (left, right, hvcoeff=LAMBDA):
+  ######################
+  # Vertical tree pass #
+  ######################
 
-# Backward pass
-B = simpletree.dp (im1[:,:,0], im2[:,:,0], nd=20, backward=True)
+  print (" --> Vertical tree")
 
-# Compute optimal costs
-C = F + B - m
+  # Horizontal pass
+  F,m = simpletree.imagedp (im1[:,:,0], im2[:,:,0], nd=20, axis=0, return_point_energy=True)
+  B = simpletree.imagedp (im1[:,:,0], im2[:,:,0], nd=20, axis=0, backward=True)
+  C = F + B - m
 
-# Display computed disparity map (with only per-scanline optimization)
-imshow (C.argmin(axis=2), cmap=cm.gray)
-show()
+  # Vertical pass
+  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=1)
+  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=1, backward=True)
+  V = Fc + Bc - C
+
+  ###################################
+  # Compute subsequent coefficients #
+  ###################################
+
+  print (" --> Coefficients")
+  Vc = m + hvcoeff*(V - V.min(axis=2).reshape((V.shape[0], V.shape[1], 1)))
+
+  ########################
+  # Horizontal tree pass #
+  ########################
+
+  print (" --> Horizontal tree")
+
+  # Horizontal pass
+  F = simpletree.dp (im1[:,:,0], im2[:,:,0], Vc, axis=1)
+  B = simpletree.dp (im1[:,:,0], im2[:,:,0], Vc, axis=1, backward=True)
+  C = F + B - Vc
+
+  # Vertical pass
+  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=0)
+  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=0, backward=True)
+  H = Fc + Bc - C
+
+  return H.argmin(axis=2)
+
+im1 = imread (sys.argv[1])
+im2 = imread (sys.argv[2])

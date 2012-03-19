@@ -21,12 +21,14 @@ PyMODINIT_FUNC initsimpletree (void);
 /**
  * Declare module methods
  */
-static PyObject *dp_pass(PyObject *self, PyObject *args, PyObject *kwdict);
+static PyObject *imagedp(PyObject *self, PyObject *args, PyObject *kwdict);
+static PyObject *dp(PyObject *self, PyObject *args, PyObject *kwdict);
 
 /**
  * Exported method list
  */
 static PyMethodDef Methods[] = {
-  {"dp", (PyCFunction)dp_pass, METH_KEYWORDS | METH_VARARGS, "Computes the disparity map of the 2 rectified stereo images in argument."},
+  {"imagedp", (PyCFunction)imagedp, METH_KEYWORDS | METH_VARARGS, "Computes the first DP passes for the 2 rectified stereo images in argument."},
+  {"dp", (PyCFunction)dp, METH_KEYWORDS | METH_VARARGS, "Computes a DP pass with pre-computed pixel energies."},
   {NULL, NULL, 0, NULL}
 };

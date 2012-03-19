@@ -3,4 +3,5 @@
 *.bz2
 *.so
 .*.swp
+*.pyc
 build/
