@@ -41,3 +41,103 @@ double disparity (double i1a, double i1b, double i1c, double i2a, double i2b, do
 
   return MIN (i1dh, i2dh);
 }
+
+PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis) {
+  // Store array dimensions for quick access
+  int h = (int)(left->dimensions[0]);
+  int w = (int)(left->dimensions[1]);
+
+  // Prepare variables
+  int dimensions[] = {h, w, 2*nd};
+  int d,scanline,p;
+  PyArrayObject *m = (PyArrayObject *)PyArray_FromDims (3, dimensions, PyArray_DOUBLE);
+
+  // For each scanline...
+  for (scanline = 0; scanline < (axis==1 ? h : w); scanline++) {
+    // For each point on the scanline...
+    for (p = 0; p < (axis==1 ? w : h); p++) {
+      // First, compute the values of the energy function for each disparity value
+      for (d = -nd; d < nd; d++) {
+        double mpd;
+
+        // On the border, set the energy to 0
+        if (p-1 < 0 || p+1 >= (axis==1 ? w : h) || p-1+d < 0 || p+1+d >= (axis==1 ? w : h)) {
+          mpd = 0;
+
+        // Else, compute it according to paper "Depth Discontinuities by Pixel-to-Pixel Stereo"
+        } else {
+          double i1a = AVAL (left, (axis==1 ? scanline : p-1), (axis==1 ? p-1 : scanline));
+          double i1b = AVAL (left, (axis==1 ? scanline : p), (axis==1 ? p : scanline));
+          double i1c = AVAL (left, (axis==1 ? scanline : p+1), (axis==1 ? p+1 : scanline));
+          double i2a = AVAL (right, (axis==1 ? scanline : p+d-1), (axis==1 ? p+d-1 : scanline));
+          double i2b = AVAL (right, (axis==1 ? scanline : p+d), (axis==1 ? p+d : scanline));
+          double i2c = AVAL (right, (axis==1 ? scanline : p+d+1), (axis==1 ? p+d+1 : scanline));
+          mpd = disparity (i1a, i1b, i1c, i2a, i2b, i2c); 
+        }
+
+        AVAL3 (m, (axis == 1 ? scanline : p), (axis == 1 ? p : scanline), d+nd) = mpd;
+      }
+    }
+  }
+
+
+  return m;
+}
+
+PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *energy, int backward, int nd, int axis) {
+  // Store array dimensions for quick access
+  int h = (int)(left->dimensions[0]);
+  int w = (int)(left->dimensions[1]);
+
+  // First DP pass
+  int dimensions[] = {h, w, 2*nd};
+  int d,scanline,p;
+  int direction, root;
+  if (backward) {
+    direction = 1;
+    root = (int)(axis==1 ? w : h)-1;
+  }
+  else {
+    direction = -1;
+    root = 0;
+  }
+
+  PyArrayObject *F = (PyArrayObject *)PyArray_FromDims (3, dimensions, PyArray_DOUBLE);
+  for (scanline=0; scanline<h; scanline++) for (p=0; p<w; p++) for (d=0; d<2*nd; d++) {
+    AVAL3(F, scanline, p, d) = 0;
+  }
+
+  // For each scanline...
+  for (scanline = 0; scanline < (axis==1 ? h : w); scanline++) {
+    // For each point on the scanline...
+    for (p = root; direction*(p-((axis==1 ? w : h)-root-1)) >= 0; p -= direction) {
+      // First, compute the values of the energy function for each disparity value
+      for (d = -nd; d < nd; d++) {
+        // If we're at the boundary, don't do anything (can't compute)
+        if (p-1 < 0 || p+1 >= (axis==1 ? w : h) || p-1+d < 0 || p+1+d >= (axis==1 ? w : h)) continue;
+
+        // Else, recursively perform DP computation
+        int i;
+
+        // Per-pixel energy
+        double mpd = AVAL3 (energy, (axis == 1 ? scanline : p), (axis == 1 ? p : scanline), d+nd);
+
+        // Pixel values for each image
+        double i1b = AVAL (left, (axis == 1 ? scanline : p), (axis == 1 ? p : scanline)); 
+        double i2b = AVAL (left, (axis == 1 ? scanline : p+d), (axis == 1 ? p+d : scanline));
+
+        // Neighbor energy
+        double slm = smoothness (-nd, d, i1b, i2b) + AVAL3(F, (axis == 1 ? scanline : p+direction), (axis == 1 ? p+direction : scanline), 0);
+        for (i = -nd+1; i < nd; i++) {
+          double sln = smoothness (i, d, i1b, i2b) + AVAL3(F, (axis == 1 ? scanline : p+direction), (axis == 1 ? p+direction : scanline), i+nd);
+          if (sln < slm) slm = sln;
+        }
+
+        // The total pixel energy is the sum of the neighbor + per-pixel energy
+        AVAL3(F, (axis == 1 ? scanline : p), (axis == 1 ? p : scanline), d+nd) = mpd + slm;
+      }
+    }
+  }
+
+  return F;
+}

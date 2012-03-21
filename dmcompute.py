@@ -27,13 +27,13 @@ def disparitymap (left, right, hvcoeff=LAMBDA):
   print (" --> Vertical tree")
 
   # Horizontal pass
-  F,m = simpletree.imagedp (im1[:,:,0], im2[:,:,0], nd=20, axis=0, return_point_energy=True)
-  B = simpletree.imagedp (im1[:,:,0], im2[:,:,0], nd=20, axis=0, backward=True)
+  F,m = simpletree.dp (im1[:,:,0], im2[:,:,0], axis=0, nd=20)
+  B = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=m, axis=0)
   C = F + B - m
 
   # Vertical pass
-  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=1)
-  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=1, backward=True)
+  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=1)
+  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=1, backward=True)
   V = Fc + Bc - C
 
   ###################################
@@ -50,13 +50,13 @@ def disparitymap (left, right, hvcoeff=LAMBDA):
   print (" --> Horizontal tree")
 
   # Horizontal pass
-  F = simpletree.dp (im1[:,:,0], im2[:,:,0], Vc, axis=1)
-  B = simpletree.dp (im1[:,:,0], im2[:,:,0], Vc, axis=1, backward=True)
+  F = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=Vc, axis=1)
+  B = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=Vc, axis=1, backward=True)
   C = F + B - Vc
 
   # Vertical pass
-  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=0)
-  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], C, axis=0, backward=True)
+  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=0)
+  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=0, backward=True)
   H = Fc + Bc - C
 
   return H.argmin(axis=2)

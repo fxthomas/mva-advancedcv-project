@@ -10,7 +10,14 @@
  * @version 1.0
  */
 
+// Multiple file includes for Numpy : http://www.gossamer-threads.com/lists/python/python/59597
+#define PY_ARRAY_UNIQUE_SYMBOL __PyArraySimpleTree
+#define NO_IMPORT_ARRAY
+
 #include <math.h>
+#include <Python.h>
+#include <numpy/arrayobject.h>
+
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 #define AVAL(A,I,J) (*(double*)(A->data + (I)*(A->strides[0]) + (J)*(A->strides[1])))
@@ -26,3 +33,13 @@ double smoothness(double d1, double d2, double i1, double i2);
  * Returns pixel disparity between `i1v`=(i1[x-1], i1[x], i1[x+1]) and `i2v`.
  */
 double disparity(double i1a, double i1b, double i1c, double i2a, double i2b, double i2c);
+
+/**
+ * Return per-pixel energy array
+ */
+PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis);
+
+/**
+ * These functions do the actual DP computation
+ */
+PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *energy, int backward, int nd, int axis);
