@@ -17,49 +17,57 @@ from pylab import *
 import sys
 import simpletree
 
-LAMBDA = 1.
+LAMBDA = 0.025
+P1 = 20.
+P2f = 30.
+P3 = 4
+T = 30
 
-def disparitymap (left, right, hvcoeff=LAMBDA):
-  ######################
-  # Vertical tree pass #
-  ######################
+im1 = imread (sys.argv[1]).mean (axis=2)
+im2 = imread (sys.argv[2]).mean (axis=2)
 
-  print (" --> Vertical tree")
+######################
+# Vertical tree pass #
+######################
 
-  # Horizontal pass
-  F,m = simpletree.dp (im1[:,:,0], im2[:,:,0], axis=0, nd=20)
-  B = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=m, axis=0)
-  C = F + B - m
+print (" --> Vertical tree")
 
-  # Vertical pass
-  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=1)
-  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=1, backward=True)
-  V = Fc + Bc - C
+# Horizontal pass
+m = simpletree.data_energy (im1, im2, nd=20, axis=1)
 
-  ###################################
-  # Compute subsequent coefficients #
-  ###################################
+F = simpletree.dp (im1, im2, energy=m, axis=0, P1=P1, P2f=P2f, P3=P3, T=T)
+B = simpletree.dp (im1, im2, energy=m, axis=0, backward=True, P1=P1, P2f=P2f, P3=P3, T=T)
+C = F + B - m
 
-  print (" --> Coefficients")
-  Vc = m + hvcoeff*(V - V.min(axis=2).reshape((V.shape[0], V.shape[1], 1)))
+# Vertical pass
+Fc = simpletree.dp (im1, im2, energy=C, axis=1, P1=P1, P2f=P2f, P3=P3, T=T)
+Bc = simpletree.dp (im1, im2, energy=C, axis=1, backward=True, P1=P1, P2f=P2f, P3=P3, T=T)
+V = Fc + Bc - C
 
-  ########################
-  # Horizontal tree pass #
-  ########################
+###################################
+# Compute subsequent coefficients #
+###################################
 
-  print (" --> Horizontal tree")
+print (" --> Coefficients")
+Vc = m + LAMBDA*(V - V.min(axis=2).reshape((V.shape[0], V.shape[1], 1)))
 
-  # Horizontal pass
-  F = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=Vc, axis=1)
-  B = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=Vc, axis=1, backward=True)
-  C = F + B - Vc
+########################
+# Horizontal tree pass #
+########################
 
-  # Vertical pass
-  Fc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=0)
-  Bc = simpletree.dp (im1[:,:,0], im2[:,:,0], energy=C, axis=0, backward=True)
-  H = Fc + Bc - C
+print (" --> Horizontal tree")
 
-  return H.argmin(axis=2)
+# Horizontal pass
+F = simpletree.dp (im1, im2, energy=Vc, axis=1, P1=P1, P2f=P2f, P3=P3, T=T)
+B = simpletree.dp (im1, im2, energy=Vc, axis=1, backward=True, P1=P1, P2f=P2f, P3=P3, T=T)
+C = F + B - Vc
 
-im1 = imread (sys.argv[1])
-im2 = imread (sys.argv[2])
+# Vertical pass
+Fc = simpletree.dp (im1, im2, energy=C, axis=0, P1=P1, P2f=P2f, P3=P3, T=T)
+Bc = simpletree.dp (im1, im2, energy=C, axis=0, backward=True, P1=P1, P2f=P2f, P3=P3, T=T)
+H = Fc + Bc - C
+
+Dmap = H.argmin(axis=2)
+
+imshow (Dmap, cmap=cm.gray)
+show()

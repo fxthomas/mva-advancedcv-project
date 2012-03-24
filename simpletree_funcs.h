@@ -24,17 +24,6 @@
 #define AVAL3(A,I,J,K) (*(double*)(A->data + (I)*(A->strides[0]) + (J)*(A->strides[1]) + (K)*(A->strides[2])))
 
 /**
- * Returns smoothing energy between disparity `d1` and `d2`
- * for pixel values `i1` and `i2` (with RGB values between 0 and 1).
- */
-double smoothness(double d1, double d2, double i1, double i2);
-
-/**
- * Returns pixel disparity between `i1v`=(i1[x-1], i1[x], i1[x+1]) and `i2v`.
- */
-double disparity(double i1a, double i1b, double i1c, double i2a, double i2b, double i2c);
-
-/**
  * Return per-pixel energy array
  */
 PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis);
@@ -42,4 +31,4 @@ PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, i
 /**
  * These functions do the actual DP computation
  */
-PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *energy, int backward, int nd, int axis);
+PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *energy, int backward, int nd, int axis, double P1, double P2f, double P3, double T);

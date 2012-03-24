@@ -22,6 +22,62 @@ PyMODINIT_FUNC initsimpletree (void) {
   import_array();
 }
 
+static PyObject *Py_data_energy (PyObject *self, PyObject *args, PyObject *kwdict) {
+  ////////////////
+  // Initialize //
+  ////////////////
+
+  // Declare variables
+  PyObject *in1 = 0, *in2 = 0;
+  PyArrayObject *left = 0;
+  PyArrayObject *right = 0;
+  int nd = 10;
+  int axis = 0;
+
+  // Parse arguments
+  static char *kwlist[] = {"left", "right", "nd", "axis", NULL};
+  if (!PyArg_ParseTupleAndKeywords (args, kwdict, "O!O!|ii", kwlist,
+        &PyArray_Type, &in1,
+        &PyArray_Type, &in2,
+        &nd,
+        &axis))
+    return NULL;
+
+  // Is the axis valid?
+  //   0: Vertical scanlines
+  //   1: Horizontal scanlines
+  if (axis != 0 && axis != 1) {
+    PyErr_SetString (PyExc_ValueError, "axis must be 0 (vertical DP) or 1 (horizontal DP)");
+    return NULL;
+  }
+
+  // Prepare left and right images (we need contiguous arrays to ba able to read them correctly from C
+  left = (PyArrayObject*) PyArray_ContiguousFromObject (in1, PyArray_DOUBLE, 2, 2);
+  right = (PyArrayObject*) PyArray_ContiguousFromObject (in2, PyArray_DOUBLE, 2, 2);
+  if (!left || !right) return NULL;
+
+  // Check if height/width are the same
+  if (left->dimensions[0] != right->dimensions[0] || left->dimensions[1] != right->dimensions[1]) {
+    PyErr_SetString (PyExc_ValueError, "arrays must have the same dimension");
+    Py_DECREF(left);
+    Py_DECREF(right);
+    return NULL;
+  }
+
+  // Generate image-based per-pixel energy
+  PyArrayObject *energy = data_energy (left, right, nd, axis);
+
+  /////////////
+  // Cleanup //
+  /////////////
+
+  // Destroy references
+  Py_DECREF (left);
+  Py_DECREF (right);
+  
+  return (PyObject*) energy;
+}
+
 /**
  * Computes the first DP passes
  */
@@ -39,16 +95,21 @@ static PyObject *Py_dp (PyObject *self, PyObject *args, PyObject *kwdict) {
   int return_point_energy = 0;
   int nd = 10;
   int axis=1;
+  double P1 = 10., P2f = 100., P3 = 0.4, T = 20.;
 
   // Parse arguments
-  static char *kwlist[] = {"left", "right", "energy", "backward", "nd", "axis", NULL};
-  if (!PyArg_ParseTupleAndKeywords (args, kwdict, "O!O!|O!O!ii", kwlist,
+  static char *kwlist[] = {"left", "right", "energy", "backward", "nd", "axis", "P1", "P2f", "P3", "T", NULL};
+  if (!PyArg_ParseTupleAndKeywords (args, kwdict, "O!O!|O!O!iidddd", kwlist,
         &PyArray_Type, &in1,
         &PyArray_Type, &in2,
         &PyArray_Type, &kwin3,
         &PyBool_Type, &kwin4,
         &nd,
-        &axis))
+        &axis,
+        &P1,
+        &P2f,
+        &P3,
+        &T))
     return NULL;
 
   // Is this a backward or a forward pass?
@@ -110,7 +171,7 @@ static PyObject *Py_dp (PyObject *self, PyObject *args, PyObject *kwdict) {
   
   if (backward) printf ("running simple tree DP (backward, nd: %d, axis: %d)\n", nd, axis);
   else printf ("running simple tree DP (forward, nd: %d, axis: %d)\n", nd, axis);
-  PyArrayObject *F = dp (left, right, energy, backward, nd, axis);
+  PyArrayObject *F = dp (left, right, energy, backward, nd, axis, P1, P2f, P3, T);
 
   /////////////
   // Cleanup //
