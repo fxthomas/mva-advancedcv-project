@@ -14,14 +14,14 @@
 from distutils.core import setup, Extension
 import numpy as np
 
-simpletree = Extension ('simpletree',
-                        sources=['simpletree_mod.c', 'simpletree_funcs.c'],
+dp = Extension ('dp',
+                        sources=['dp_module.c', 'dp_methods.c'],
                         include_dirs = [np.get_include()],
                         extra_compile_args=["-O0"],
                         extra_link_args=["-O0"])
 
-setup (name = "SimpleTree",
+setup (name = "Simple tree DP",
        version = "0.1",
-       description = "Simple tree algorithm for disparity map computation",
-       ext_modules = [simpletree]
+       description = "Simple tree DP algorithm for disparity map computation",
+       ext_modules = [dp]
 )

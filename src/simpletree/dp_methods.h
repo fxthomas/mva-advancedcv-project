@@ -1,5 +1,5 @@
 /**
- * Base C Header (simpletree_funcs.h)
+ * Base C Header (dp_methods.h)
  * Created: Sat Mar 17 17:29:15 2012
  *
  * This C Header was developped by François-Xavier Thomas.
@@ -29,6 +29,6 @@
 PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis);
 
 /**
- * These functions do the actual DP computation
+ * This function does the actual DP computation
  */
 PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *energy, int backward, int nd, int axis, double P1, double P2f, double P3, double T);

@@ -1,5 +1,5 @@
 /**
- * Base C Source code (simpletree_funcs.c)
+ * Base C Source code (dp_methods.c)
  * Created: Sat Mar 17 17:29:12 2012
  *
  * This C source code was developped by François-Xavier Thomas.
@@ -10,7 +10,7 @@
  * @version 1.0
  */
 
-#include "simpletree_funcs.h"
+#include "dp_methods.h"
 
 PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis) {
   // Store array dimensions for quick access

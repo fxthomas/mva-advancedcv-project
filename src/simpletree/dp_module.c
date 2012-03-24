@@ -1,5 +1,5 @@
 /**
- * Base C Source code (simpletree.c)
+ * Base C Source code (dp_module.c)
  * Created: Sat Mar 17 15:20:43 2012
  *
  * This C source code was developped by François-Xavier Thomas.
@@ -10,15 +10,15 @@
  * @version 1.0
  */
 
-#include "simpletree_mod.h"
-#include "simpletree_funcs.h"
+#include "dp_module.h"
+#include "dp_methods.h"
 #include <stdio.h>
 
 /**
  * Initialize module
  */
-PyMODINIT_FUNC initsimpletree (void) {
-  if (!Py_InitModule ("simpletree", Methods)) return;
+PyMODINIT_FUNC initdp (void) {
+  if (!Py_InitModule ("dp", Methods)) return;
   import_array();
 }
 
@@ -32,7 +32,7 @@ static PyObject *Py_data_energy (PyObject *self, PyObject *args, PyObject *kwdic
   PyArrayObject *left = 0;
   PyArrayObject *right = 0;
   int nd = 10;
-  int axis = 0;
+  int axis = 1;
 
   // Parse arguments
   static char *kwlist[] = {"left", "right", "nd", "axis", NULL};
@@ -95,7 +95,7 @@ static PyObject *Py_dp (PyObject *self, PyObject *args, PyObject *kwdict) {
   int return_point_energy = 0;
   int nd = 10;
   int axis=1;
-  double P1 = 10., P2f = 100., P3 = 0.4, T = 20.;
+  double P1 = 20., P2f = 30., P3 = 4., T = 30.;
 
   // Parse arguments
   static char *kwlist[] = {"left", "right", "energy", "backward", "nd", "axis", "P1", "P2f", "P3", "T", NULL};
@@ -169,8 +169,8 @@ static PyObject *Py_dp (PyObject *self, PyObject *args, PyObject *kwdict) {
   // Main algorithm //
   ////////////////////
   
-  if (backward) printf ("running simple tree DP (backward, nd: %d, axis: %d)\n", nd, axis);
-  else printf ("running simple tree DP (forward, nd: %d, axis: %d)\n", nd, axis);
+  //if (backward) printf ("running simple tree DP (backward, nd: %d, axis: %d)\n", nd, axis);
+  //else printf ("running simple tree DP (forward, nd: %d, axis: %d)\n", nd, axis);
   PyArrayObject *F = dp (left, right, energy, backward, nd, axis, P1, P2f, P3, T);
 
   /////////////
