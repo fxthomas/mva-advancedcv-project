@@ -12,11 +12,11 @@
 # (ɔ) François-Xavier Thomas <fx.thomas@gmail.com>
 
 from numpy import *
-from scipy import *
 from pylab import *
 import cv2
 import sys
 import numpy as np
+import os
 
 #########################
 # Some useful functions #
@@ -132,7 +132,13 @@ def rectify (left, right, rmin=None):
 #########################
 
 if __name__ == '__main__':
+  # File names
+  left_name, left_ext = os.path.splitext(sys.argv[1])
+  right_name, right_ext = os.path.splitext(sys.argv[2])
+
   # Read images and rectify them
   b1 = cv2.imread (sys.argv[1])
   b2 = cv2.imread (sys.argv[2])
   b1r, b2r = rectify (b1, b2)
+  cv2.imwrite (left_name+"-rectified"+left_ext, b1r)
+  cv2.imwrite (right_name+"-rectified"+right_ext, b2r)
