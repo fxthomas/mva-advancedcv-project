@@ -1,7 +1,4 @@
-all: simpletree
+all: module_simpletree
 
-simpletree: force_look
+module_simpletree:
 	make -C simpletree/
-
-force_look:
-	true
