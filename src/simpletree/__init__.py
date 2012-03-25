@@ -21,6 +21,12 @@ def disparity (left, right, nd=20, LAMBDA=0.025, P1=20, P2f=30, P3=4, T=30):
   `LAMBDA` is the horizontal/vertical DP balancing term
   `P1`, `P2f`, `P3`, `T` are the smoothness model paramters
   """
+
+  if left.ndim == 3:
+    left = left.mean (axis=2)
+  if right.ndim == 3:
+    right = right.mean (axis=2)
+
   ######################
   # Vertical tree pass #
   ######################
