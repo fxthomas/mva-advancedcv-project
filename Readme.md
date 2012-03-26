@@ -40,3 +40,7 @@ I implemented this algorithm as a Python module, `simpletree`.
 The algorithm basically runs the same DP algorithm 8 times on the provided images, so the core DP method is written in C, for efficiency, and can be found in the `simpletree.dp` module.
 
 ![Disparity map for the Tsukuba image pair](https://github.com/fxthomas/mva-advancedcv-project/raw/master/images/Disparity-Tsukuba.png)
+
+## Image segmentation
+
+![Disparity map for the Tsukuba image pair](https://github.com/fxthomas/mva-advancedcv-project/raw/master/images/All-Subplots.png)
