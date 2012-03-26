@@ -43,4 +43,13 @@ The algorithm basically runs the same DP algorithm 8 times on the provided image
 
 ## Image segmentation
 
+Another requirement of the _WarpMat_ paper is the segmentation of the input images, which is achieved by using the Mean Shift algorithm fromt the paper _Mean Shift: A robust approach toward feature space analysis_, by D. Comanicu and P. Meer.
+
+The corresponding Python module, `meanshift`, is a light wrapper around a small part of the source of the EDISON system they implemented, which can be found at [this website](http://coewww.rutgers.edu/riul/research/code/EDISON/index.html). These links also were a lot of help in creating this wrapper :
+
+   * [Shai Bagon's Matlab code](http://www.wisdom.weizmann.ac.il/~bagon/matlab.html)
+   * [Shawn Lankton's Matlab wrapper](http://www.shawnlankton.com/2007/11/mean-shift-segmentation-in-matlab/)
+   
+By running the `test.py` file, you can see all these stages in action :
+
 ![Disparity map for the Tsukuba image pair](https://github.com/fxthomas/mva-advancedcv-project/raw/master/images/All-Subplots.png)
