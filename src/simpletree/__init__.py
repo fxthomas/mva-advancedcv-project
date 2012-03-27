@@ -26,6 +26,10 @@ def disparity (left, right, nd=20, LAMBDA=0.025, P1=20, P2f=30, P3=4, T=30):
     left = left.mean (axis=2)
   if right.ndim == 3:
     right = right.mean (axis=2)
+  if left.max() <= 1.1:
+    left = left * 255.
+  if right.max() <= 1.1:
+    right = right * 255.
 
   ######################
   # Vertical tree pass #

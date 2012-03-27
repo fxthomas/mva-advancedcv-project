@@ -22,32 +22,28 @@ print ("Loading images...")
 left = imread ("data/b1.jpg")[::-1,:,:]
 right = imread ("data/b2.jpg")[::-1,:,:]
 
-# Display images
+# Compute mean-shift segmentation
+print ("Computing segmentation...")
+segl = meanshift.segment (left)
+segr = meanshift.segment (right)
+
+# Show segmentation
 subplot (221)
-title ("Left image")
-imshow (left)
+title ("Segmented left image")
+imshow (segl)
 
 subplot (222)
-title ("Right image")
-imshow (right)
+title ("Segmented right image")
+imshow (segr)
 
 # Compute disparity
 print ("Computing disparity map...")
-disp = simpletree.disparity (left, right)
+disp = simpletree.disparity (segl, segr)
 
 # Show disparity map
 print ("Displaying disparity map...")
 subplot (223)
 title ("Disparity map")
 imshow (disp, cmap=cm.gray)
-
-# Compute mean-shift segmentation
-print ("Computing segmentation...")
-seg = meanshift.segment (left)
-
-# Show segmentation
-subplot (224)
-title ("Segmented left image")
-imshow (seg)
 
 show()
