@@ -68,3 +68,18 @@ with ProgressMeter ("Generating buffers") as p:
     left_buffer[:,:,d,1][disp == d] = segl[:,:,1][disp == d]
     left_buffer[:,:,d,2][disp == d] = segl[:,:,2][disp == d]
     left_buffer[:,:,d,3][disp == d] = 1.
+
+virt_right_image = zeros (left.shape)
+coeff = zeros ((left.shape[0], left.shape[1]))
+with ProgressMeter ("Composing right image") as p:
+  for di in range(40):
+    p.tick (di * 100. / 40)
+    d = di - 20
+
+    tmp = np.roll (left_buffer[:,:,di,:], d, axis=1)
+    virt_right_image = virt_right_image + tmp[:,:,:3]*tmp[:,:,3].reshape((tmp.shape[0],tmp.shape[1],1))
+    coeff = coeff + tmp[:,:,3]
+
+virtl = virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1))
+imshow (virtl)
+show()
