@@ -14,27 +14,38 @@
 from sys import stdout
 
 class ProgressMeter:
-  def __init__ (self, message):
-    self.value = 0.
+  def __init__ (self, message, ntick=0):
+    self.value = 0
     self.message = message
     self._started = False
+    self._increment = 100./ntick
 
   def start (self):
+    if self._started:
+      self.end()
+
     stdout.write (self.message + " [    %]")
     stdout.flush()
     self._started = True
+    self.value = 0
 
-  def tick (self, value):
+  def tick (self, value=None):
     if not self._started:
       self.start()
 
-    stdout.write ("\b\b\b\b\b\b{0:3.0f} %]".format (value))
+    if value is not None:
+      self.value = value
+    else:
+      self.value = self.value + self._increment
+
+    stdout.write ("\b\b\b\b\b\b{0:3.0f} %]".format (self.value))
     stdout.flush()
 
   def end (self):
     if self._started:
       stdout.write ("\b\b\b\b\b\bDone] \n")
       stdout.flush()
+      self._started = False
 
   def __enter__ (self):
     self.start()

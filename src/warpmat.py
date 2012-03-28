@@ -45,9 +45,9 @@ data_y = labels.transpose().reshape ((-1,))
 models = zeros ((labels.max()+1, 3))
 
 dmax = data_y.max()
-with ProgressMeter ("Computing segment coefficients") as p:
+with ProgressMeter ("Computing segment coefficients", dmax+1) as p:
   for fl in range (dmax+1):
-      p.tick (fl*100./dmax)
+      p.tick ()
 
       mdl = linear_model.SGDRegressor (loss='squared_loss', penalty='l1')
       mdl.fit (data_x[data_y==fl,:], data_y[data_y==fl])
@@ -60,9 +60,9 @@ left_buffer = zeros ((labels.shape[0], labels.shape[1], 40, 4)) # We have ND=20 
 right_buffer = zeros ((labels.shape[0], labels.shape[1], 40, 4))
 
 # Generate initial data for left buffer
-with ProgressMeter ("Generating buffers") as p:
+with ProgressMeter ("Generating buffers", 40) as p:
   for d in range(40):
-    p.tick (d * 100. / 40)
+    p.tick()
 
     left_buffer[:,:,d,0][disp == d] = segl[:,:,0][disp == d]
     left_buffer[:,:,d,1][disp == d] = segl[:,:,1][disp == d]
@@ -71,9 +71,9 @@ with ProgressMeter ("Generating buffers") as p:
 
 virt_right_image = zeros (left.shape)
 coeff = zeros ((left.shape[0], left.shape[1]))
-with ProgressMeter ("Composing right image") as p:
+with ProgressMeter ("Composing right image", 40) as p:
   for di in range(40):
-    p.tick (di * 100. / 40)
+    p.tick()
     d = di - 20
 
     tmp = np.roll (left_buffer[:,:,di,:], d, axis=1)
