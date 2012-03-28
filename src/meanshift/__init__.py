@@ -15,7 +15,11 @@ import edison
 import colorspace
 import numpy as np
 
-def segment(image):
+def segment(image, return_labels=False):
   iluv = np.float32 (colorspace.rgb2luv (np.float32(image)))
   fim, labels, modes = edison.meanshift (iluv)
-  return colorspace.luv2rgb(fim)
+
+  if return_labels:
+    return colorspace.luv2rgb(fim), labels
+  else:
+    return colorspace.luv2rgb(fim)
