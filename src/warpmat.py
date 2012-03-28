@@ -11,14 +11,23 @@
 # 
 # (ɔ) François-Xavier Thomas <fx.thomas@gmail.com>
 
+# For displaying stuff on the console
 from __future__ import with_statement
-
-from pylab import *
-from sklearn import linear_model
-import meanshift
-import simpletree
-from sys import stdout
 from progress import ProgressMeter
+from sys import stdout
+
+# Array & Image manipulation libraries
+from pylab import *
+from scipy.ndimage import generate_binary_structure, morphology
+
+# Planar regression
+from sklearn import linear_model
+
+# Meanshift segmentation module
+import meanshift
+
+# SimpleTree disparity map algorithm module
+import simpletree
 
 # Load images
 print ("Loading images")
@@ -60,6 +69,7 @@ left_buffer = zeros ((labels.shape[0], labels.shape[1], 40, 4)) # We have ND=20 
 right_buffer = zeros ((labels.shape[0], labels.shape[1], 40, 4))
 
 # Generate initial data for left buffer
+#st = generate_binary_structure (2, 1)
 with ProgressMeter ("Generating buffers", 40) as p:
   for d in range(40):
     p.tick()
@@ -68,6 +78,11 @@ with ProgressMeter ("Generating buffers", 40) as p:
     left_buffer[:,:,d,1][disp == d] = segl[:,:,1][disp == d]
     left_buffer[:,:,d,2][disp == d] = segl[:,:,2][disp == d]
     left_buffer[:,:,d,3][disp == d] = 1.
+
+    #_leftd = morphology.binary_dilation (left_buffer[:,:,d,3], structure=st, iterations=5)
+    #_lefte = morphology.binary_erosion (left_buffer[:,:,d,3], structure=st, iterations=5)
+    #left_buffer[:,:,d,3][_leftd & ~_lefte] = 0.5
+
 
 virt_right_image = zeros (left.shape)
 coeff = zeros ((left.shape[0], left.shape[1]))
@@ -81,5 +96,5 @@ with ProgressMeter ("Composing right image", 40) as p:
     coeff = coeff + tmp[:,:,3]
 
 virtl = virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1))
-imshow (virtl)
-show()
+#imshow (virtl)
+#show()
