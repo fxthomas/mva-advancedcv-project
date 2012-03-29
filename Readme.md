@@ -9,13 +9,16 @@ For those who need the [tl;dr](http://en.wikipedia.org/wiki/TLDR), the project w
   1. Acquire stereo images
   2. Rectify them
   3. Compute the initial disparity map
-  4. WarpMat
+  4. Compute an initial segmentation
+  5. WarpMat
+  
+For more details, see the `Report.tm` file (to be opened with [TeXmacs](http://www.texmacs.org))
   
 What you need in order to run this project :
 
-  * A working **Python 2.x** distribution (I use 2.7)
-  * The **numpy**, **matplotlib** and **sklearn** Python packages (type `sudo pip install <package>` in a terminal to install a package in Python) for data manipulation and display
-  * The **opencv** package and its Python bindings (usually installed with something like `sudo apt-get install opencv` in Ubuntu -- _not tested_)    
+  * A working **Python 2.7** distribution
+  * The [**numpy**](http://numpy.scipy.org), [**scipy**](http://www.scipy.org/Installing_SciPy), [**matplotlib**](http://matplotlib.sourceforge.net/users/installing.html) and [**scikits-learn**](http://scikit-learn.sourceforge.net/dev/install.html) Python packages
+  * The **opencv** package and its Python bindings (only for `rectify.py`)  
 
 ## Rectifying Stereo Images
 
