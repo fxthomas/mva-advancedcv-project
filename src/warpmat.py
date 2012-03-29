@@ -19,6 +19,7 @@ from sys import stdout
 # Array & Image manipulation libraries
 from pylab import *
 from scipy.ndimage import generate_binary_structure, morphology
+import matplotlib
 
 # Planar regression
 from sklearn import linear_model
@@ -52,6 +53,7 @@ with ProgressMeter ("Computing segmentation", 2) as p:
   p.tick()
 
 # Compute disparity
+disp = None
 with ProgressMeter ("Computing disparity map", 1) as p:
   disp = simpletree.disparity (segl, segr)
   p.tick()
@@ -107,7 +109,24 @@ with ProgressMeter ("Composing right image", 40) as p:
     tmp = np.roll (left_buffer[:,:,di,:], d, axis=1)
     virt_right_image = virt_right_image + tmp[:,:,:3]*tmp[:,:,3].reshape((tmp.shape[0],tmp.shape[1],1))
     coeff = coeff + tmp[:,:,3]
+virtr = virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1))
+virtr[isnan(virtr)] = 1.
 
-virtl = virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1))
-imshow (virtl)
+subplot (221)
+title ("Segmented left image")
+imshow (labels, cmap=matplotlib.colors.ListedColormap (np.random.rand (256, 3)))
+
+subplot (222)
+title ("Disparity map")
+imshow (disp, cmap=cm.gray)
+
+subplot (223)
+title ("Reconstructed right image")
+imshow (virtr)
+
+subplot (224)
+title ("Right view and reconstruction overlay")
+imshow (right)
+imshow (virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1)), alpha=0.5)
+
 show()

@@ -4,8 +4,6 @@ This project is a end-course project for the **Advanced Methods For Computer Vis
 
 The goal of the project was to re-implement and test the algorithm outlined in the paper _A Stereo Approach that Handles the Matting Problem via Image Warping_ by Michael Bleyer, Margrit Gelautz, Carsten Rother, and Christoph Rhemann.
 
-In this file, I'll explain briefly the different stages of the implementation and the issues I encountered.
-
 For those who need the [tl;dr](http://en.wikipedia.org/wiki/TLDR), the project was split in the following steps :
 
   1. Acquire stereo images
@@ -16,8 +14,8 @@ For those who need the [tl;dr](http://en.wikipedia.org/wiki/TLDR), the project w
 What you need in order to run this project :
 
   * A working **Python 2.x** distribution (I use 2.7)
-  * The **numpy** and **matplotlib** packages (type `sudo pip install <package>` in a terminal to install a package in Python) for data manipulation and display
-  * The **opencv** package and its Python bindings (usually installed with something like `sudo apt-get install opencv` in Ubuntu -- _not tested_)
+  * The **numpy**, **matplotlib** and **sklearn** Python packages (type `sudo pip install <package>` in a terminal to install a package in Python) for data manipulation and display
+  * The **opencv** package and its Python bindings (usually installed with something like `sudo apt-get install opencv` in Ubuntu -- _not tested_)    
 
 ## Rectifying Stereo Images
 
@@ -50,6 +48,12 @@ The corresponding Python module, `meanshift`, is a light wrapper around a small 
    * [Shai Bagon's Matlab code](http://www.wisdom.weizmann.ac.il/~bagon/matlab.html)
    * [Shawn Lankton's Matlab wrapper](http://www.shawnlankton.com/2007/11/mean-shift-segmentation-in-matlab/)
    
+## Tests
+   
 By running the `test.py` file, you can see all these stages in action :
 
 ![Disparity map for the Tsukuba image pair](https://github.com/fxthomas/mva-advancedcv-project/raw/master/images/All-Subplots.png)
+
+Also, the `warpmat.py` file shows how the artificial right view is reconstructed.
+
+![Disparity map for the Tsukuba image pair](https://github.com/fxthomas/mva-advancedcv-project/raw/master/images/All-WarpMat.png)

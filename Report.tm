@@ -53,6 +53,11 @@
   dynamic programming-based stereo matching>, by the same authors, Michael
   Bleyer and Margrit Gelautz.
 
+  I implemented this algorithm as a Python module, <verbatim|simpletree>. The
+  algorithm basically runs the same DP algorithm 8 times on the provided
+  images, so the core DP method is written in C, for efficiency, and can be
+  found in the <verbatim|simpletree.dp> module.
+
   <subsection|Energy minimization>
 
   Disparity map computation is often viewed as a form of energy minimization.
@@ -151,12 +156,14 @@
   times with different energy values and scanline axes.
 
   The algorithm itself is quite fast, my unoptimized implementation taking
-  2.1 seconds for a Tsukuba image pair.
+  2.1 seconds for a Tsukuba image pair on a single thread, and 1.5 seconds
+  with OpenMP on 4 threads -- CPU is a <with|font-shape|italic|Core i5>
+  1.7GHz --, but this could certainly be improved.
 
-  This yields pretty good disparity maps in a few seconds for
+  This also yields pretty good disparity maps in a few seconds for
   <math|600\<times\>400> images, even on a pair of images that's half-blurred
-  and quickly captured by hand with a cellphone (I don't know about you, but
-  I consider that to be pretty bad conditions!), such as here :
+  and quickly captured by hand with a cellphone camera (I don't know about
+  you, but I consider that to be pretty bad conditions!), such as here :
 
   <center|<image|images/Disparity-FX.png|25%|||>>
 
@@ -193,11 +200,134 @@
 
   The corresponding Python module, <verbatim|meanshift>, is a light wrapper
   around a small part of the source of the EDISON system implemented by D.
-  Comanicu and P. Meer, which can be found at their website.
+  Comanicu and P. Meer, which can be found at their website. This system
+  integrates a few improvements over the original mean-shift algorithm,
+  described in detail in <with|font-shape|italic|Mean Shift: A Robust
+  Approach Toward Feature Space Analysis> by the same people.
 
   <center|<image|images/Segmentation-Labels.png|40%|||>>
 
+  The segmentation module computes a segmented Tsukuba vew in approx. 1.6
+  seconds on my machine.
+
+  <section|Plane fitting (<verbatim|src/warpmat.py>)>
+
+  For <with|font-shape|italic|WarpMat>, the disparity planes are modelled is
+  a piecewise-affine manner for each segment of the segmented image, such as
+  in this simple example (fitted planes are represented as the blue, green
+  and red lines) :
+
+  <center|<image|images/Disparity-PlaneModels.png|35%|||>>
+
+  The initialization is done by linear regression on all the pixels of each
+  segment, and the naive Python implementation takes about 3.9 seconds for
+  the Tsukuba pair, for approx. 8k labels.
+
+  <section|Artificial right view generation (<verbatim|src/warpmat.py>)>
+
+  Given the disparity map, and the segments in the left image, we can
+  reconstruct the right image by simply translating iso-disparity components.
+
+  The greater the disparity, the greater the displacement, as in the example
+  below. The artificial right view is then computed by blending the pixel
+  values together.
+
   \;
+
+  <center|<with|gr-mode|<tuple|edit|line>|gr-frame|<tuple|scale|0.75cm|<tuple|0.0900389gw|0.0950185gh>>|gr-geometry|<tuple|geometry|0.480003par|0.280004par|center>|gr-grid|<tuple|empty>|gr-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-aspect|<tuple|<tuple|axes|none>|<tuple|1|none>|<tuple|10|none>>|gr-edit-grid|<tuple|empty>|gr-edit-grid-old|<tuple|cartesian|<point|0|0>|1>|magnify|0.75|gr-arrow-end|\|\<gtr\>|<graphics||<text-at|<math|d>|<point|-0.4|4.3>>|<text-at|Image
+  pixels (Left view)|<point|4.71756184680513|-0.387180844026988>>|<with|color|red|line-width|10ln|<line|<point|1|1>|<point|3.0|1.0>>>|<with|color|blue|line-width|10ln|<line|<point|3|2>|<point|4.0|2.0>>>|<with|color|orange|line-width|10ln|<line|<point|4|4>|<point|5.4|4.0>>>|<with|color|dark
+  green|line-width|10ln|<line|<point|6|1>|<point|7.0|1.0>>>|<with|color|dark
+  green|arrow-end|\|\<gtr\>|<line|<point|7|1>|<point|7.5|1.0>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|3|1>|<point|3.6|1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|4|2>|<point|5.5|2.0>>>|<with|color|orange|arrow-end|\|\<gtr\>|<line|<point|5.4|4>|<point|8.4|4.0>>>|<with|arrow-end|\|\<gtr\>|<line|<point|0|0>|<point|0.0|5.0>>>|<with|arrow-end|\|\<gtr\>|<line|<point|0|0>|<point|8.58424835736649|-0.00509326630506681>>>>><center|<with|gr-mode|<tuple|edit|line>|gr-frame|<tuple|scale|0.75cm|<tuple|0.0700408gw|0.0950185gh>>|gr-geometry|<tuple|geometry|0.480003par|0.280004par|center>|gr-grid|<tuple|empty>|gr-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-aspect|<tuple|<tuple|axes|none>|<tuple|1|none>|<tuple|10|none>>|gr-edit-grid|<tuple|empty>|gr-edit-grid-old|<tuple|cartesian|<point|0|0>|1>|magnify|0.75|gr-arrow-end|\|\<gtr\>|<graphics||<text-at|<math|d>|<point|-0.4|4.3>>|<text-at|Image
+  pixels (Reconstructed right view)|<point|2.50653746086343|-0.361154473695815>>|<with|color|red|line-width|10ln|<line|<point|1.6|1.0>|<point|3.6|1.0>>>|<with|color|blue|line-width|10ln|<line|<point|4.5|2.0>|<point|5.5|2.0>>>|<with|color|orange|line-width|10ln|<line|<point|6.9|4.1>|<point|8.3|4.1>>>|<with|color|dark
+  green|line-width|10ln|<line|<point|6.6|1.0>|<point|7.6|1.0>>>|<with|color|orange|line-width|10ln|<line|<point|6.9|4.1>|<point|8.3|4.1>>>|<with|arrow-end|\|\<gtr\>|<line|<point|0|0>|<point|0.0|5.0>>>|<with|arrow-end|\|\<gtr\>|<line|<point|0|0>|<point|8.8066763681263|0.0209463332892358>>>>>>>
+
+  <image|images/Disparity-RightReconstruction.png|50%|||>
+
+  The left image can be reconstructed with the same idea, without displacing
+  the disparity components.
+
+  <section|<with|font-shape|italic|WarpMat>>
+
+  Tying all these different parts together, we can now build the
+  <with|font-shape|italic|WarpMat> algorithm. We have our initial
+  <math|D<rsub|S>> (the disparity models for each segment <math|S>) and
+  <math|c<rsub|p>,\<alpha\><rsub|p><rsub|>> (color and opacity) for each
+  point <math|p> in the image.
+
+  What WarpMat does, roughly, is enumerating a set of
+  <math|D<rsub|S>,c<rsub|p>,\<alpha\><rsub|p>> values for each point and
+  segment, and finding the values minimizing a global energy :
+
+  <\enumerate>
+    <item>Find <math|D<rsub|S>> by minimizing the following energy :
+
+    <\equation*>
+      E<rsub|total> = E<rsub|l>+E<rsub|asum>+E<rsub|r>+E<rsub|asmooth>+E<rsub|dsmooth>
+    </equation*>
+
+    <\itemize>
+      <item><math|E<rsub|l>> is minimized when the reconstructed left image
+      is the same as the real left view
+
+      <item><math|E<rsub|r>> is minimized when the reconstructed right image
+      is the same as the real right view
+
+      <item><math|E<rsub|asum>> is infinite if, for at least one point
+      <math|p> in the reconstructed right image, the sum of
+      <math|\<alpha\><rsub|p,d>> values over each disparity label is not
+      equal to 1. This ensures that there is no overflow nor underflow in
+      pixel values.
+
+      <item><math|E<rsub|asmooth>> and <math|E<rsub|dsmooth>> respectively
+      minimize the <math|\<alpha\>> and disparity plane differences between
+      segments
+    </itemize>
+
+    <with|font-shape|italic|(The formulas for these energies can be found in
+    the paper, I chose not to include them here, as they don't help very much
+    the basic understanding of the algorithm)>
+
+    \;
+
+    The energy being pretty complicated, <with|font-shape|italic|WarpMat>
+    finds a set of candidate disparity planes and iterates through it to find
+    the best value.
+
+    <item>For each point <math|p>, find <math|c<rsub|p>> and
+    <math|\<alpha\><rsub|p>> (color and opacity) minimizing
+    <math|E<rsub|asum>,E<rsub|l>> and <math|E<rsub|r>>, by using belief
+    propagation.
+
+    <item>Repeat until satisfied
+  </enumerate>
+
+  <center|<with|gr-mode|<tuple|group-edit|move>|gr-frame|<tuple|scale|1cm|<tuple|0.5gw|-5442tmpt>>|gr-geometry|<tuple|geometry|0.666669par|0.266669par|center>|gr-grid|<tuple|empty>|gr-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-aspect|<tuple|<tuple|axes|none>|<tuple|1|none>|<tuple|10|none>>|gr-edit-grid|<tuple|empty>|gr-edit-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-arrow-end|\|\<gtr\>|gr-color|blue|<graphics||<cline|<point|-4|2.5>|<point|-1.0|2.5>|<point|-1.0|1.6>|<point|-4.0|1.6>>|<with|magnify|1.35726900069715|<cline|<point|0.464096498954279|2.66077105031372>|<point|0.464096498954279|1.43922894968628>|<point|4.53590350104572|1.43922894968628>|<point|4.53590350104572|2.66077105031372>>>|<text-at|Disparity
+  model|<point|-3.77260732107421|1.92719748908586>>|<text-at|Segment colors
+  and <math|\<alpha\>>|<point|0.79030064317682|1.92793127000926>>|<with|color|blue|arrow-end|\|\<gtr\>|<spline|<point|-2.39646|2.5>|<point|-0.0390097896547162|3.18115822198704>|<point|2.58280460878253|2.66077105031372>>>|<with|color|blue|arrow-end|\|\<gtr\>|<spline|<point|2.52971|1.43923>|<point|-0.250677999735415|0.937475195131631>|<point|-2.55627078444612|1.6>>>|<with|color|blue|<text-at|optimization
+  with constant <math|D<rsub|S>>|<point|-2.24035884058738|3.51982807381929>>>|<with|color|blue|<text-at|optimization
+  with constant <math|c<rsub|p>> and <math|\<alpha\><rsub|p>>|<point|-2.62136332715968|0.429471225029766>>>>>>
+
+  \;
+
+  Overall, the core of the <with|font-shape|italic|WarpMat> optimization is
+  akin to a brute-force method with some hacks to make it run faster, and
+  doesn't really introduce new concepts and ideas (at least in my opinion --
+  feel free to disagree). And (according to the authors) it doesn't even run
+  very fast, as they claim it processed a Tsukuba pair in approx. 10 minutes.
+
+  The ideas and methods surrounding the algorithm are what's interesting
+  here. In summary, here are the main interesting points :
+
+  <\itemize>
+    <item>DP-based disparity computation
+
+    <item>Mean-Shift segmentation
+
+    <item>Optimization of a piecewise-affine disparity model
+
+    <item>Possibility of reconstructing an artificial right view, based on
+    the disparity
+  </itemize>
 </body>
 
 <\initial>
@@ -209,12 +339,15 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-2|<tuple|2|1>>
+    <associate|auto-10|<tuple|6|6>>
+    <associate|auto-2|<tuple|2|2>>
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-5|<tuple|2.3|2>>
-    <associate|auto-6|<tuple|2.4|?>>
-    <associate|auto-7|<tuple|3|?>>
+    <associate|auto-5|<tuple|2.3|3>>
+    <associate|auto-6|<tuple|2.4|4>>
+    <associate|auto-7|<tuple|3|4>>
+    <associate|auto-8|<tuple|4|5>>
+    <associate|auto-9|<tuple|5|6>>
   </collection>
 </references>
 
@@ -250,6 +383,20 @@
       (<with|font-family|<quote|tt>|language|<quote|verbatim>|src/meanshift/>)>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Plane
+      fitting (<with|font-family|<quote|tt>|language|<quote|verbatim>|src/warpmat.py>)>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Artificial
+      right view generation (<with|font-family|<quote|tt>|language|<quote|verbatim>|src/warpmat.py>)>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-9><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|font-shape|<quote|italic>|WarpMat>>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
