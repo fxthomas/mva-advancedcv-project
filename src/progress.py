@@ -12,6 +12,7 @@
 # (ɔ) François-Xavier Thomas <fx.thomas@gmail.com>
 
 from sys import stdout
+from os import times
 
 class ProgressMeter:
   def __init__ (self, message, ntick=0):
@@ -27,11 +28,15 @@ class ProgressMeter:
     stdout.write (self.message + " [    %]")
     stdout.flush()
     self._started = True
+    self._start_time = times()[4]
+    self.elapsed = 0
     self.value = 0
 
   def tick (self, value=None):
     if not self._started:
       self.start()
+
+    self.elapsed = times()[4] - self._start_time
 
     if value is not None:
       self.value = value
@@ -43,9 +48,11 @@ class ProgressMeter:
 
   def end (self):
     if self._started:
-      stdout.write ("\b\b\b\b\b\bDone] \n")
-      stdout.flush()
       self._started = False
+      self.elapsed = times()[4] - self._start_time
+
+      stdout.write ("\b\b\b\b\b\bDone in {0:.1f} seconds] \n".format(self.elapsed))
+      stdout.flush()
 
   def __enter__ (self):
     self.start()

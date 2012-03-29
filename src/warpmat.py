@@ -29,21 +29,30 @@ import meanshift
 # SimpleTree disparity map algorithm module
 import simpletree
 
+np.seterr (invalid="ignore")
+
 # Load images
-print ("Loading images")
-left = imread ("data/t1.bmp")[::-1,:,:3]
-right = imread ("data/t2.bmp")[::-1,:,:3]
-#left = imread ("data/b1.jpg")[::-1,:,:]
-#right = imread ("data/b2.jpg")[::-1,:,:]
+left, right = None, None
+with ProgressMeter ("Loading images", 2) as p:
+  left = imread ("data/t1.bmp")[::-1,:,:3]
+  p.tick()
+
+  right = imread ("data/t2.bmp")[::-1,:,:3]
+  p.tick()
 
 # Compute mean-shift segmentation
-print ("Computing segmentation")
-segl,labels = meanshift.segment (left, return_labels=True)
-segr = meanshift.segment (right)
+segl,segr,labels = None,None,None
+with ProgressMeter ("Computing segmentation", 2) as p:
+  segl,labels = meanshift.segment (left, return_labels=True)
+  p.tick()
+
+  segr = meanshift.segment (right)
+  p.tick()
 
 # Compute disparity
-print ("Computing disparity map")
-disp = simpletree.disparity (segl, segr)
+with ProgressMeter ("Computing disparity map", 1) as p:
+  disp = simpletree.disparity (segl, segr)
+  p.tick()
 
 # Prepare coordinates array
 xp = arange (0, 1, 1./labels.shape[1])

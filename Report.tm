@@ -141,6 +141,15 @@
     Horizontal Tree>
   </center>
 
+  <\equation*>
+    m<rprime|'><around*|(|p,d|)>=m<around*|(|p,d|)>+\<lambda\>*<around*|(|V<around*|(|p,d|)>-min<rsub|i\<in\>\<cal-D\>>V<around*|(|p,i|)>|)>
+  </equation*>
+
+  Concerning the implementation, all these DP passes -- 4 times
+  forward-backward, so 8 passes -- are in fact the same algorithm, and can be
+  factored. My implementation is a C module (for efficiency) that's called 8
+  times with different energy values and scanline axes.
+
   This yields pretty good disparity maps in a few seconds for
   <math|600\<times\>400> images, even on a pair of images that's half-blurred
   and quickly captured by hand with a cellphone (I don't know about you, but
@@ -159,7 +168,7 @@
 
   The basic premise behind Mean-Shift is the following : each pixel <math|p>
   is surrounded by others in a known radius, and the mean of all these
-  sourrounding pixels is <math|m>. Each iteration of Mean-Shift then moves
+  surrounding pixels is <math|m>. Each iteration of Mean-Shift then moves
   <math|p> towards <math|m>. After a few iterations, all the pixels have
   converged towards the center of the local cluster where they belong. The
   image is then segmented in regions of pixels with the same center.
@@ -184,6 +193,8 @@
   Comanicu and P. Meer, which can be found at their website.
 
   <center|<image|images/Segmentation-Labels.png|40%|||>>
+
+  \;
 </body>
 
 <\initial>
@@ -228,6 +239,14 @@
       <with|par-left|<quote|1.5fn>|Tree-based optimization
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
+
+      <with|par-left|<quote|1.5fn>| <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-6>>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Segmentation
+      (<with|font-family|<quote|tt>|language|<quote|verbatim>|src/meanshift/>)>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-7><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
