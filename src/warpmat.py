@@ -31,8 +31,10 @@ import simpletree
 
 # Load images
 print ("Loading images")
-left = imread ("data/b1.jpg")[::-1,:,:]
-right = imread ("data/b2.jpg")[::-1,:,:]
+left = imread ("data/t1.bmp")[::-1,:,:3]
+right = imread ("data/t2.bmp")[::-1,:,:3]
+#left = imread ("data/b1.jpg")[::-1,:,:]
+#right = imread ("data/b2.jpg")[::-1,:,:]
 
 # Compute mean-shift segmentation
 print ("Computing segmentation")
