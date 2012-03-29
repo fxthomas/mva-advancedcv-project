@@ -84,7 +84,11 @@
 
   <\center>
     <with|gr-mode|<tuple|edit|spline>|gr-frame|<tuple|scale|1cm|<tuple|0.5gw|0.5gh>>|gr-geometry|<tuple|geometry|0.393357par|0.366676par|center>|gr-grid|<tuple|empty>|gr-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-edit-grid-aspect|<tuple|<tuple|axes|none>|<tuple|1|none>|<tuple|10|none>>|gr-edit-grid|<tuple|empty>|gr-edit-grid-old|<tuple|cartesian|<point|0|0>|1>|gr-color|dark
-    green|gr-arrow-end|\|\<gtr\>|gr-dash-style-unit|20ln|<graphics||<point|-2|2>|<point|-2|1>|<point|-2|0>|<point|-2|-1>|<point|-2|-2>|<point|-1|-2>|<point|0|-2>|<point|1|-2>|<point|2|-2>|<point|2|-1>|<point|2|0>|<point|2|1>|<point|2|2>|<point|1|2>|<point|0|2>|<point|-1|2>|<point|-1|1>|<point|-1|-1>|<point|1|-1>|<point|1|1>|<with|color|blue|<point|-1|0>>|<with|color|blue|<point|1|0>>|<with|color|blue|<point|0|-1>>|<with|color|blue|<point|0|1>>|<with|color|red|<carc|<point|0.4|-0.4>|<point|-0.4|0.4>|<point|0.3|0.5>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|1|0>|<point|0.2|0.0>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|0|1>|<point|0.0|0.2>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|-1|0>|<point|-0.2|0.0>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|0|-1>|<point|0.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|2|0>|<point|1.2|0.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|0|2>|<point|0.0|1.3>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-2|0>|<point|-1.2|0.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|0|-2>|<point|0.0|-1.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|-1>|<point|0.2|-1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|-1>|<point|-0.2|-1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|1>|<point|-0.2|1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|1>|<point|0.2|1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|1>|<point|-1.0|0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|-1>|<point|-1.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|-1>|<point|1.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|1>|<point|1.0|0.3>>>>>
+    blue|gr-arrow-end|\|\<gtr\>|gr-dash-style-unit|20ln|<graphics||<point|-2|2>|<point|-2|1>|<point|-2|0>|<point|-2|-1>|<point|-2|-2>|<point|-1|-2>|<point|0|-2>|<point|1|-2>|<point|2|-2>|<point|2|-1>|<point|2|0>|<point|2|1>|<point|2|2>|<point|1|2>|<point|0|2>|<point|-1|2>|<point|-1|1>|<point|-1|-1>|<point|1|-1>|<point|1|1>|<with|color|blue|<point|-1|0>>|<with|color|blue|<point|1|0>>|<with|color|blue|<point|0|-1>>|<with|color|blue|<point|0|1>>|<with|color|red|<carc|<point|0.4|-0.4>|<point|-0.4|0.4>|<point|0.3|0.5>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|1|0>|<point|0.2|0.0>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|0|1>|<point|0.0|0.2>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|-1|0>|<point|-0.2|0.0>>>|<with|color|red|arrow-end|\|\<gtr\>|<line|<point|0|-1>|<point|0.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|2|0>|<point|1.2|0.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|0|2>|<point|0.0|1.3>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-2|0>|<point|-1.2|0.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|0|-2>|<point|0.0|-1.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|-1>|<point|0.2|-1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|-1>|<point|-0.2|-1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|1>|<point|-0.2|1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|1>|<point|0.2|1.0>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|1>|<point|-1.0|0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|-1|-1>|<point|-1.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|-1>|<point|1.0|-0.2>>>|<with|color|blue|arrow-end|\|\<gtr\>|<line|<point|1|1>|<point|1.0|0.3>>>|<with|color|dark
+    blue|arrow-end|\|\<gtr\>|dash-style-unit|20ln|<spline|<point|0|0.2>|<point|0.369759921654311|0.451450849617079>|<point|0.0|1.0>>>|<with|color|dark
+    blue|arrow-end|\|\<gtr\>|dash-style-unit|20ln|<spline|<point|0|-0.2>|<point|0.306397893974115|-0.471169854257612>|<point|0.0|-1.0>>>|<with|color|dark
+    blue|arrow-end|\|\<gtr\>|dash-style-unit|20ln|<spline|<point|0.2|0>|<point|0.502207008235756|0.296224419260636>|<point|1.0|0.0>>>|<with|color|dark
+    blue|arrow-end|\|\<gtr\>|dash-style-unit|20ln|<spline|<point|-0.2|0>|<point|-0.477689265243385|-0.270390410300793>|<point|-1.0|0.0>>>>>
 
     <with|font-shape|italic|Image pixels graph showing energy computation for
     the node at the center>
@@ -94,7 +98,7 @@
 
   On the contrary, minimization over a tree can be computed in exactly 2 DP
   passes (forward and backward), and, according to the
-  <with|font-shape|italic|SimpleTree> paper, some papers discuss methods
+  <with|font-shape|italic|SimpleTree> paper, some authors discussed methods
   using different kinds of trees.
 
   <with|font-shape|italic|SimpleTree>, similarly, uses a tree that can be
@@ -137,14 +141,49 @@
     Horizontal Tree>
   </center>
 
-  This yields pretty good disparity maps, even on a pair of images that's
-  half-blurred and quickly captured by hand with a cellphone (I don't know
-  about you, but I consider that to be pretty bad conditions!), such as here
-  :
+  This yields pretty good disparity maps in a few seconds for
+  <math|600\<times\>400> images, even on a pair of images that's half-blurred
+  and quickly captured by hand with a cellphone (I don't know about you, but
+  I consider that to be pretty bad conditions!), such as here :
 
   <center|<image|images/Disparity-FX.png|25%|||>>
 
-  \;
+  <subsection|>
+
+  <section|Segmentation (<verbatim|src/meanshift/>)>
+
+  Another input the <with|font-shape|italic|WarpMat> algorithm needs is an
+  over-segmented left view. There are a lot of algorithms available that do
+  it, but <with|font-shape|italic|WarpMat> recommends the Mean-Shift
+  algorithm.
+
+  The basic premise behind Mean-Shift is the following : each pixel <math|p>
+  is surrounded by others in a known radius, and the mean of all these
+  sourrounding pixels is <math|m>. Each iteration of Mean-Shift then moves
+  <math|p> towards <math|m>. After a few iterations, all the pixels have
+  converged towards the center of the local cluster where they belong. The
+  image is then segmented in regions of pixels with the same center.
+
+  <center|<with|gr-mode|<tuple|edit|point>|gr-frame|<tuple|scale|1cm|<tuple|0.549995gw|0.330016gh>>|gr-geometry|<tuple|geometry|0.606676par|0.233344par|center>|gr-line-width|2ln|gr-arrow-end|\|\<gtr\>|gr-point-style|square|<graphics||<with|color|green|<point|-2.6738|1.10706>>|<with|color|green|<point|-2.63993|0.53132>>|<with|color|green|<point|-1.96259|0.785322>>|<with|color|green|<point|-2.18273|-0.40002>>|<with|color|green|<point|-2.877|-0.0444173>>|<with|color|green|<point|-1.48846|0.0571835>>|<with|color|green|<point|-1.09899|0.751455>>|<with|color|dark
+  green|<point|-2.40286|0.04025>>|<with|color|dark
+  green|<point|-1.94566|0.226518>>|<with|color|dark
+  green|<point|-3.0294|0.599054>>|<with|color|dark
+  green|<point|-2.19966|1.19173>>|<with|color|dark
+  green|<point|-1.33606|1.22559>>|<with|color|dark
+  green|<point|-1.50539|-0.40002>>|<with|color|yellow|<point|-1.08205|0.0910504>>|<with|color|yellow|<point|-1.04819|-0.535487>>|<with|color|yellow|<point|-0.624851|0.141851>>|<with|color|yellow|<point|-0.709518|1.32719>>|<with|color|yellow|<point|-1.03125|1.7336>>|<with|color|yellow|<point|-1.62393|1.59813>>|<with|color|yellow|<point|-1.62393|0.836123>>|<with|color|orange|<point|-0.438583|0.565187>>|<with|color|orange|<point|-0.658718|0.802256>>|<with|color|orange|<point|-0.303115|1.37799>>|<with|color|orange|<point|-0.47245|1.7336>>|<with|color|orange|<point|-0.387783|-0.416953>>|<with|color|orange|<point|-0.099914|0.107984>>|<with|color|red|<point|0.0524871|1.02239>>|<with|color|red|<point|0.323422|0.615988>>|<with|color|red|<point|0.306489|-0.0613507>>|<with|color|red|<point|-0.0660471|-0.535487>>|<with|color|red|<point|1.3225|0.666788>>|<with|color|red|<point|0.763692|1.24253>>|<with|color|red|<point|0.171021|1.37799>>|<with|color|red|<point|0.374223|1.86906>>|<with|color|red|<point|0.831426|0.514387>>|<with|color|red|<point|0.933027|-0.416953>>|<with|color|red|<point|0.50969|-0.349219>>|<with|color|red|<point|1.4241|-0.0952176>>|<with|color|dark
+  magenta|<point|0.374223|1.03932>>|<with|color|dark
+  magenta|<point|0.712892|0.107984>>|<with|color|dark
+  magenta|<point|1.06849|0.107984>>|<with|color|dark
+  magenta|<point|1.06849|0.836123>>|<with|color|dark
+  magenta|<point|0.797559|1.76746>>|<with|color|green|line-width|2ln|<carc|<point|-2.877|-0.0444173>|<point|-1.09899|0.751455>|<point|-1.08205|0.0910504>>>|<with|color|red|line-width|2ln|<carc|<point|0.933027|-0.416953>|<point|0.374223|1.86906>|<point|-0.48938351633814|0.836122502976584>>>|<with|color|red|<text-at|Red
+  cluster|<point|1.91517|-0.40002>>>|<with|color|green|<text-at|Green
+  cluster|<point|-4.65501|-0.755622>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-1.82711|-0.5606>|<point|-2.04726154253208|0.429719539621643>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-1.18302|-0.122661>|<point|-1.82712660404815|0.463586453234555>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-2.44827|1.26778>|<point|-2.08112845614499|0.632921021299114>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-2.95483|0.165084>|<point|-2.25046302420955|0.463586453234555>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-1.09899|0.751455>|<point|-1.72552586320942|0.615987564492658>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|1.80652|0.381793>|<point|0.746758830533139|0.802255589363672>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|1.33134|1.71579>|<point|0.848359571371875|1.07319089826697>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|-0.338874|0.149422>|<point|0.526623892049213|0.700654848524937>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|0.698132|-0.443683>|<point|0.628224632887948|0.514386823653922>>>|<with|arrow-end|\|\<gtr\>|line-width|2ln|<line|<point|0.0552087|1.72883>|<point|0.57742426246858|0.954656700621775>>>>>>
+
+  The corresponding Python module, <verbatim|meanshift>, is a light wrapper
+  around a small part of the source of the EDISON system implemented by D.
+  Comanicu and P. Meer, which can be found at their website.
+
+  <center|<image|images/Segmentation-Labels.png|40%|||>>
 </body>
 
 <\initial>
@@ -159,7 +198,9 @@
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-5|<tuple|2.3|?>>
+    <associate|auto-5|<tuple|2.3|2>>
+    <associate|auto-6|<tuple|2.4|?>>
+    <associate|auto-7|<tuple|3|?>>
   </collection>
 </references>
 

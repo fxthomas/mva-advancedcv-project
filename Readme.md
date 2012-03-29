@@ -43,7 +43,7 @@ The algorithm basically runs the same DP algorithm 8 times on the provided image
 
 ## Image segmentation
 
-Another requirement of the _WarpMat_ paper is the segmentation of the input images, which is achieved by using the Mean Shift algorithm fromt the paper _Mean Shift: A robust approach toward feature space analysis_, by D. Comanicu and P. Meer.
+Another requirement of the _WarpMat_ paper is the segmentation of the input images, which is achieved by using the Mean Shift algorithm from the paper _Mean Shift: A robust approach toward feature space analysis_, by D. Comanicu and P. Meer.
 
 The corresponding Python module, `meanshift`, is a light wrapper around a small part of the source of the EDISON system they implemented, which can be found at [this website](http://coewww.rutgers.edu/riul/research/code/EDISON/index.html). These links also were a lot of help in creating this wrapper :
 
