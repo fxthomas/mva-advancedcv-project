@@ -150,6 +150,9 @@
   factored. My implementation is a C module (for efficiency) that's called 8
   times with different energy values and scanline axes.
 
+  The algorithm itself is quite fast, my unoptimized implementation taking
+  2.1 seconds for a Tsukuba image pair.
+
   This yields pretty good disparity maps in a few seconds for
   <math|600\<times\>400> images, even on a pair of images that's half-blurred
   and quickly captured by hand with a cellphone (I don't know about you, but

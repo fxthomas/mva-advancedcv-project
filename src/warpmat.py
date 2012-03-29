@@ -35,9 +35,11 @@ np.seterr (invalid="ignore")
 left, right = None, None
 with ProgressMeter ("Loading images", 2) as p:
   left = imread ("data/t1.bmp")[::-1,:,:3]
+  #left = imread ("data/m1r.jpg")[::-1,:,:]
   p.tick()
 
   right = imread ("data/t2.bmp")[::-1,:,:3]
+  #right = imread ("data/m2r.jpg")[::-1,:,:]
   p.tick()
 
 # Compute mean-shift segmentation
@@ -107,5 +109,5 @@ with ProgressMeter ("Composing right image", 40) as p:
     coeff = coeff + tmp[:,:,3]
 
 virtl = virt_right_image / coeff.reshape((coeff.shape[0],coeff.shape[1],1))
-#imshow (virtl)
-#show()
+imshow (virtl)
+show()

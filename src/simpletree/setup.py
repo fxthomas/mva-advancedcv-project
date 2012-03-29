@@ -17,8 +17,8 @@ import numpy as np
 dp = Extension ('dp',
                         sources=['dp_module.c', 'dp_methods.c'],
                         include_dirs = [np.get_include()],
-                        extra_compile_args=["-O0"],
-                        extra_link_args=["-O0"])
+                        extra_compile_args=["-O0", "-fopenmp"],
+                        extra_link_args=["-O0", "-fopenmp"])
 
 setup (name = "Simple tree DP",
        version = "0.1",

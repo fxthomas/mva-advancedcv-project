@@ -11,6 +11,7 @@
  */
 
 #include "dp_methods.h"
+#include <omp.h>
 
 PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, int axis) {
   // Store array dimensions for quick access
@@ -23,6 +24,7 @@ PyArrayObject *data_energy (PyArrayObject *left, PyArrayObject *right, int nd, i
   PyArrayObject *m = (PyArrayObject *)PyArray_FromDims (3, dimensions, PyArray_DOUBLE);
 
   // For each scanline...
+#pragma omp parallel for default(shared) private(scanline,p,d)
   for (scanline = nd+1; scanline < (axis==1 ? h : w) - (nd+1); scanline++) {
     // For each point on the scanline...
     for (p = nd+1; p < (axis==1 ? w : h) - nd-1; p++) {
@@ -64,7 +66,7 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
   int h = (int)(left->dimensions[0]);
   int w = (int)(left->dimensions[1]);
   int dimensions[] = {h, w, 2*nd};
-  int dim_lmin[] = {h, w};
+  int dim_lmin[] = {h, w, omp_get_num_threads()};
   int d, scanline, p, direction, root;
 
   // First DP pass
@@ -79,10 +81,12 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
 
   // Create array
   PyArrayObject *F = (PyArrayObject *)PyArray_FromDims (3, dimensions, PyArray_DOUBLE);
-  PyArrayObject *LMin = (PyArrayObject *)PyArray_FromDims (2, dim_lmin, PyArray_DOUBLE);
+  PyArrayObject *LMin = (PyArrayObject *)PyArray_FromDims (3, dim_lmin, PyArray_DOUBLE);
 
   // For each scanline...
+#pragma omp parallel for default(shared) private(scanline,p,d)
   for (scanline = nd+1; scanline < (axis==1 ? h : w) - (nd+1); scanline++) {
+
     // For each point on the scanline...
     for (p = root; direction*(p-((axis==1 ? w : h)-root-1)) >= 0; p -= direction) {
       // Point coordinates
@@ -90,7 +94,7 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
       int pj = (axis == 1 ? p : scanline);
       int qi = (axis == 1 ? scanline : p + direction);
       int qj = (axis == 1 ? p + direction : scanline);
-      AVAL (LMin, pi, pj) = INFINITY;
+      AVAL3 (LMin, pi, pj, omp_get_thread_num()) = INFINITY;
 
       // Pixel values for each image
       double i1b = AVAL (left, qi, qj); 
@@ -111,7 +115,7 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
           double lqd = AVAL3 (F, qi, qj, d+nd);
           double lqdm = AVAL3 (F, qi, qj, d+nd-1) + P1;
           double lqdp = AVAL3 (F, qi, qj, d+nd+1) + P1;
-          double min_lqd = AVAL (LMin, qi, qj) + P2;
+          double min_lqd = AVAL3 (LMin, qi, qj, omp_get_thread_num()) + P2;
 
           sl_curr = MIN (lqd, min_lqd);
           if (d > -nd) sl_curr = MIN (sl_curr, lqdm);
@@ -120,7 +124,7 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
 
         // Value of l'(p,d)
         double lpd = mpd + sl_curr;
-        if (lpd < AVAL (LMin, pi, pj)) AVAL (LMin, pi, pj) = lpd;
+        if (lpd < AVAL3 (LMin, pi, pj, omp_get_thread_num())) AVAL3 (LMin, pi, pj, omp_get_thread_num()) = lpd;
 
         // The total pixel energy is the sum of the neighbor + per-pixel energy
         AVAL3(F, pi, pj, d+nd) = lpd;
@@ -129,6 +133,5 @@ PyArrayObject *dp (PyArrayObject *left, PyArrayObject *right, PyArrayObject *ene
   }
 
   Py_DECREF (LMin);
-
   return F;
 }
