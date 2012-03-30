@@ -177,7 +177,159 @@
 \subsection{Segmentation}
 
 \begin{frame}{Mean-Shift Segmentation}
+  \begin{block}{Simple idea}
+    \begin{itemize}
+      \item Unsupervised mode detection algorithm
+      \item Shifts pixels of the image towards the mean around a window
+    \end{itemize}
+  \end{block}
 
+  \begin{center}
+    \includegraphics[height=4cm]{graphics/segmentation-meanshift.eps}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Mean-Shift Segmentation}
+  \begin{block}{Oversegmentation}
+    The output images are often oversegmented, but we don't care : oversegmented is better than under-segmented.
+  \end{block}
+
+  \begin{center}
+    \includegraphics[height=5cm]{../images/Segmentation-Labels.png}
+  \end{center}
+\end{frame}
+
+\section{WarpMat}
+\subsection{Plane fitting}
+
+\begin{frame}
+  \begin{block}{Disparity model optimization}
+    \begin{itemize}
+      \item As \emph{WarpMat} is an energy minimization algorithm, the authors chose to include the optimization of the disparities.
+      \item Piecewise affine disparity model
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \includegraphics[height=4cm]{../images/Disparity-PlaneModels.png}
+  \end{center}
+\end{frame}
+
+\subsection{Artificial right view generation}
+\begin{frame}
+  \begin{block}{Core idea of \emph{WarpMat}}
+    \begin{itemize}
+      \item We can generate an artificial right view by using the optimized colors in the left image and displacing them, according to their disparities
+      \item Verifies the "goodness" of optimized $\alpha$ and color values
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \includegraphics[height=3cm]{graphics/warpmat-artificialright-1.eps}
+    \includegraphics[height=3cm]{graphics/warpmat-artificialright-2.eps}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Artificial right view generation}
+  \begin{block}{Example with initial values}
+    Tsukuba image pair
+  \end{block}
+  \begin{center}
+    \includegraphics[height=5cm]{../images/All-WarpMat.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Artificial right view generation}
+  \begin{block}{Example with initial values}
+    Tsukuba image pair
+  \end{block}
+  \begin{center}
+    \includegraphics[height=5cm]{graphics/warpmat-virtual-full.eps}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Artificial right view generation}
+  \begin{block}{Example with initial values}
+    Tsukuba image pair
+  \end{block}
+  \begin{center}
+    \includegraphics[height=5cm]{graphics/warpmat-virtual-overlay.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Artificial right view generation}
+  \begin{block}{}
+    Another example
+  \end{block}
+  \begin{center}
+    \includegraphics[height=5cm]{graphics/warpmat-another-example.png}
+  \end{center}
+\end{frame}
+
+\subsection{Core algorithm}
+
+\begin{frame}{Core algorithm}
+  \begin{block}{Energy minimization}
+    \begin{itemize}
+      \item Very complex energy
+    \end{itemize}
+
+    \[ E_{\tmop{total}} = E_l + E_{\tmop{asum}} + E_r + E_{\tmop{asmooth}} +
+       E_{\tmop{dsmooth}} \]
+
+    \begin{itemize}
+      \item $E_l$ and $E_r$ minimize the differences between left/right views and their reconstructions
+      
+      \item $E_{\tmop{asum}}$ verifies that the $\alpha$ values sum to 1
+      
+      \item $E_{\tmop{asmooth}}$ and $E_{\tmop{dsmooth}}$ minimize
+      $\alpha$ and disparity plane differences between segments
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Core algorithm}
+  \begin{block}{Energy minimization}
+    Switch between :
+    \begin{itemize}
+      \item Optimizing the \textbf{disparity models}
+      \item Optimizing the \textbf{segment colors and $\alpha$}
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \includegraphics[height=3cm]{graphics/warpmat-core-algorithm.eps}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Core algorithm}
+  \begin{block}{Energy minimization}
+    \begin{itemize}
+      \item Disparity models are optimized by finding the best candidate in a set of possibilities (\emph{brute-force})
+      \item $c_p$ and $\alpha$ are optimized by belief propagation
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+  \begin{block}{Conclusion}
+    \begin{itemize}
+      \item Approach taken by \emph{WarpMat} is akin to brute-force
+      \item The ideas and concepts of the core algorithm aren't exactly new
+      \item But interesting ideas and algorithms surround \emph{WarpMat}
+        \begin{itemize}
+          \item DP-based disparity computation
+          \item Optimization of a piecewise affine disparity model
+          \item Reconstruction of an artificial right view
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{center} \large Thanks for listening! \end{center}
 \end{frame}
 
 \end{document}
