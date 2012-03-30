@@ -18,7 +18,10 @@ What you need in order to run this project :
 
   * A working **Python 2.7** distribution
   * The [**numpy**](http://numpy.scipy.org), [**scipy**](http://www.scipy.org/Installing_SciPy), [**matplotlib**](http://matplotlib.sourceforge.net/users/installing.html) and [**scikits-learn**](http://scikit-learn.sourceforge.net/dev/install.html) Python packages
-  * The **opencv** package and its Python bindings (only for `rectify.py`)  
+  * The **opencv** package and its Python bindings (only for `rectify.py`)
+
+Just cd into the `src` directory and type `make` to build the required Python modules.
+Then you can run the two test programs, `test.py` and `warpmat.py`.
 
 ## Rectifying Stereo Images
 
