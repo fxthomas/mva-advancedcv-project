@@ -35,12 +35,12 @@ np.seterr (invalid="ignore")
 # Load images
 left, right = None, None
 with ProgressMeter ("Loading images", 2) as p:
-  left = imread ("data/t1.bmp")[::-1,:,:3]
-  #left = imread ("data/m1r.jpg")[::-1,:,:]
+  #left = imread ("data/t1.bmp")[::-1,:,:3]
+  left = imread ("data/m1r.jpg")[::-1,:,:]
   p.tick()
 
-  right = imread ("data/t2.bmp")[::-1,:,:3]
-  #right = imread ("data/m2r.jpg")[::-1,:,:]
+  #right = imread ("data/t2.bmp")[::-1,:,:3]
+  right = imread ("data/m2r.jpg")[::-1,:,:]
   p.tick()
 
 # Compute mean-shift segmentation

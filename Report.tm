@@ -167,8 +167,6 @@
 
   <center|<image|images/Disparity-FX.png|25%|||>>
 
-  <subsection|>
-
   <section|Segmentation (<verbatim|src/meanshift/>)>
 
   Another input the <with|font-shape|italic|WarpMat> algorithm needs is an
@@ -207,7 +205,7 @@
 
   <center|<image|images/Segmentation-Labels.png|40%|||>>
 
-  The segmentation module computes a segmented Tsukuba vew in approx. 1.6
+  The segmentation module computes a segmented Tsukuba view in approx. 1.6
   seconds on my machine.
 
   <section|Plane fitting (<verbatim|src/warpmat.py>)>
@@ -344,10 +342,10 @@
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-4|<tuple|2.2|2>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-6|<tuple|2.4|4>>
-    <associate|auto-7|<tuple|3|4>>
-    <associate|auto-8|<tuple|4|5>>
-    <associate|auto-9|<tuple|5|6>>
+    <associate|auto-6|<tuple|3|4>>
+    <associate|auto-7|<tuple|4|4>>
+    <associate|auto-8|<tuple|5|5>>
+    <associate|auto-9|<tuple|6|6>>
   </collection>
 </references>
 
